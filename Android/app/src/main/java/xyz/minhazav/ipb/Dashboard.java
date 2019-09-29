@@ -1,6 +1,6 @@
 package xyz.minhazav.ipb;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
+import xyz.minhazav.ipb.Data.ImageData;
 
 public class Dashboard extends AppCompatActivity {
 
@@ -36,7 +39,6 @@ public class Dashboard extends AppCompatActivity {
         testYuvToRgbJniYuvlibButton = findViewById(R.id.button_yuv_to_rgb_java_jni_libyuv);
         testYuvToRgbJniOpencvButton = findViewById(R.id.button_yuv_to_rgb_java_jni_opencv);
         testYuvToRgbRenderscriptButton = findViewById(R.id.button_yuv_to_rgb_java_renderscript);
-        listOfDisabledButtons.add(buttonCapturePicture);
         listOfDisabledButtons.add(testYuvToRgbPureJavaButton);
         listOfDisabledButtons.add(testYuvToRgbJniYuvlibButton);
         listOfDisabledButtons.add(testYuvToRgbJniOpencvButton);
@@ -45,12 +47,28 @@ public class Dashboard extends AppCompatActivity {
         log("Application Created");
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (ImageData.getInstance().getIsSet()) {
+            ImageData imageData = ImageData.getInstance();
+            final int imageWidth = imageData.getWidth();
+            final int imageHeight = imageData.getHeight();
+            log("Image Frame Available.");
+            log(String.format("Image Resolution: %d X %d", imageWidth, imageHeight));
+            log(String.format(
+                    "Size of array: %d", imageData.getImageArray().length));
+            log(String.format("Conversion Time: %d ms", imageData.getConversionTimeInMs()));
+
+            frameCaptured = true;
+            updateButtonEnabled(true);
+        }
+    }
+
     public void onCaptureButtonClicked(View v) {
         log("Capture button clicked.");
-        // TODO: Open intent to capture YUV frame and come back here.
-        // if the frame is captured, set the following to true.
-        frameCaptured = true;
-        updateButtonEnabled(true);
+        Intent openCaptureActivity = new Intent(this, CameraActivity.class);
+        startActivity(openCaptureActivity);
     }
 
     public void onTestYuvToRgbPureJavaButtonClicked(View v) {
