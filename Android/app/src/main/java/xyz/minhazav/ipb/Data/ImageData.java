@@ -1,14 +1,14 @@
 package xyz.minhazav.ipb.Data;
 
+import android.util.Log;
 import java.nio.ByteBuffer;
-import java.time.Clock;
-import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.camera.core.ImageProxy;
 
 /** Singleton {@link ImageProxy} container. */
 public class ImageData {
+    private static final String TAG = ImageData.class.getSimpleName();
     private static final ImageData ourInstance = new ImageData();
 
     @Nullable private byte[] imageArray;
@@ -88,20 +88,23 @@ public class ImageData {
         final int w = img.getWidth();
         final int h = img.getHeight();
         final ImageProxy.PlaneProxy[] planeList = img.getPlanes();
-        ByteBuffer y_buffer = planeList[0].getBuffer();
-        ByteBuffer u_buffer = planeList[1].getBuffer();
-        ByteBuffer v_buffer = planeList[2].getBuffer();
+        final ByteBuffer y_buffer = planeList[0].getBuffer();
+        final ByteBuffer u_buffer = planeList[1].getBuffer();
+        final ByteBuffer v_buffer = planeList[2].getBuffer();
         final int color_pixel_stride = planeList[1].getPixelStride();
         final int y_size = y_buffer.capacity();
         final int u_size = u_buffer.capacity();
         final int data_offset = w * h;
+        
         for (int i = 0; i < y_size; i++) {
             dataCopy[i] = (byte) (y_buffer.get(i) & 255);
         }
+
         for (int i = 0; i < u_size / color_pixel_stride; i++) {
             dataCopy[data_offset + 2 * i] = v_buffer.get(i * color_pixel_stride);
             dataCopy[data_offset + 2 * i + 1] = u_buffer.get(i * color_pixel_stride);
         }
+
         return dataCopy;
     }
 }
