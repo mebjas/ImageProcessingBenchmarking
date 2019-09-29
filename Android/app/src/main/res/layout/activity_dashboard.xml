@@ -33,12 +33,24 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
 
-                <Button
-                    android:id="@+id/button_capture_picture"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Capture YUV"
-                    android:onClick="onCaptureButtonClicked"/>
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/button_capture_picture"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Capture YUV"
+                        android:onClick="onCaptureButtonClicked"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Clear Logs"
+                        android:onClick="onClearLogButtonClicked"/>
+
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/edittext_iterations"
@@ -119,10 +131,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="160dp"
-            android:background="#000000"
+            android:background="#bdbdbd"
             android:padding="10dp"
             android:text="Logs here.."
-            android:textColor="#00ff00" />
+            android:textColor="#000000" />
 
     </ScrollView>
 

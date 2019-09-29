@@ -17,6 +17,9 @@ import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import xyz.minhazav.ipb.data.ImageData;
+import xyz.minhazav.ipb.experiment.Experiment;
+import xyz.minhazav.ipb.experiment.Experiment.ExperimentConfig;
+import xyz.minhazav.ipb.experiment.yuvToBitmap.PureJavaYuvToBitmap;
 
 public class Dashboard extends AppCompatActivity {
 
@@ -83,8 +86,21 @@ public class Dashboard extends AppCompatActivity {
         startActivity(openCaptureActivity);
     }
 
+    public void onClearLogButtonClicked(View v) {
+        logContainerTextView.setText("");
+    }
+
     public void onTestYuvToRgbPureJavaButtonClicked(View v) {
         log("Test Yuv To Rgb PureJava Button Clicked.");
+        final String experimentName = "YUVtoRgbPureJava";
+
+        // disable other buttons
+        updateButtonEnabled(false);
+
+        Experiment experiment = new PureJavaYuvToBitmap();
+        experiment.start(
+                new ExperimentConfig(experimentName, iterations),
+                new ExperimentCallback(experimentName));
     }
 
     public void onTestYuvToRgbJniYuvlibButtonClicked(View v) {
@@ -145,6 +161,36 @@ public class Dashboard extends AppCompatActivity {
             }
 
             iterations = newIterationsValue;
+        }
+    }
+
+    private final class ExperimentCallback implements Experiment.Callback {
+
+        private final String experimentName;
+
+        ExperimentCallback(String experimentName) {
+            this.experimentName = experimentName;
+        }
+
+        @Override
+        public void onNewLog(String message) {
+            log(message);
+        }
+
+        @Override
+        public void onSuccess() {
+            log(String.format("Experiment: %s finished.", experimentName));
+            onComplete();
+        }
+
+        @Override
+        public void onFailure(Exception ex) {
+            log(String.format("Experiment: %s failed with: %s", experimentName, ex.getMessage()));
+            onComplete();
+        }
+
+        private void onComplete() {
+            updateButtonEnabled(true);
         }
     }
 }
