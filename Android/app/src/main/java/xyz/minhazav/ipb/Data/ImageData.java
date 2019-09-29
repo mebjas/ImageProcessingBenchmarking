@@ -1,6 +1,5 @@
-package xyz.minhazav.ipb.Data;
+package xyz.minhazav.ipb.data;
 
-import android.util.Log;
 import java.nio.ByteBuffer;
 
 import androidx.annotation.Nullable;

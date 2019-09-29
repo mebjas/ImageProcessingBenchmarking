@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
-import xyz.minhazav.ipb.Data.ImageData;
+import xyz.minhazav.ipb.data.ImageData;
 
 public class Dashboard extends AppCompatActivity {
 

@@ -25,7 +25,7 @@ import androidx.camera.core.PreviewConfig;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
-import xyz.minhazav.ipb.Data.ImageData;
+import xyz.minhazav.ipb.data.ImageData;
 
 public class CameraActivity extends AppCompatActivity {
 
