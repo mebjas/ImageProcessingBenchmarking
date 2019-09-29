@@ -4,17 +4,12 @@ import xyz.minhazav.ipb.data.ImageData;
 
 public interface Experiment {
     /**
-     * Prepare the experiment
+     * Start the experiment.
      *
      * @param experimentConfig configuration.
-     * @param logger Logger instance for logging.
+     * @param callback callbacks for experiment.
      */
-    void prepare(ExperimentConfig experimentConfig, Logger logger);
-
-    /**
-     * Start the experiment
-     */
-    void start();
+    void start(ExperimentConfig experimentConfig, Callback callback);
 
     class ExperimentConfig {
         private final String name;
@@ -38,7 +33,9 @@ public interface Experiment {
         }
     }
 
-    interface Logger {
-        void log(String message);
+    interface Callback {
+        void onNewLog(String message);
+        void onSuccess();
+        void onFailure(Exception ex);
     }
 }
