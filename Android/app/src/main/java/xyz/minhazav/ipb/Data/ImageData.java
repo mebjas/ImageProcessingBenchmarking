@@ -95,7 +95,7 @@ public class ImageData {
         final int y_size = y_buffer.capacity();
         final int u_size = u_buffer.capacity();
         final int data_offset = w * h;
-        
+
         for (int i = 0; i < y_size; i++) {
             dataCopy[i] = (byte) (y_buffer.get(i) & 255);
         }

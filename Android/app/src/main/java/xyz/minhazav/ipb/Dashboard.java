@@ -2,11 +2,15 @@ package xyz.minhazav.ipb;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,18 +21,21 @@ import xyz.minhazav.ipb.Data.ImageData;
 public class Dashboard extends AppCompatActivity {
 
     private static final String TAG = Dashboard.class.getSimpleName();
+    private static final int DEFAULT_ITERATIONS_VALUE = 10;
+    private static final int ITERATIONS_MAX_VALUE = 50;
 
-    private final List<Button> listOfDisabledButtons = new ArrayList<>();
+    private final List<View> listOfDisabledViews = new ArrayList<>();
 
     private TextView logContainerTextView;
     private ScrollView logScrollView;
-    private Button buttonCapturePicture;
     private Button testYuvToRgbPureJavaButton;
     private Button testYuvToRgbJniYuvlibButton;
     private Button testYuvToRgbJniOpencvButton;
     private Button testYuvToRgbRenderscriptButton;
+    private EditText iterationsEditText;
 
     private boolean frameCaptured = false;
+    private int iterations = DEFAULT_ITERATIONS_VALUE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +44,18 @@ public class Dashboard extends AppCompatActivity {
 
         logContainerTextView = findViewById(R.id.log_container);
         logScrollView = findViewById(R.id.log_section);
-        buttonCapturePicture = findViewById(R.id.button_capture_picture);
         testYuvToRgbPureJavaButton = findViewById(R.id.button_yuv_to_rgb_java_pure_java);
         testYuvToRgbJniYuvlibButton = findViewById(R.id.button_yuv_to_rgb_java_jni_libyuv);
         testYuvToRgbJniOpencvButton = findViewById(R.id.button_yuv_to_rgb_java_jni_opencv);
         testYuvToRgbRenderscriptButton = findViewById(R.id.button_yuv_to_rgb_java_renderscript);
-        listOfDisabledButtons.add(testYuvToRgbPureJavaButton);
-        listOfDisabledButtons.add(testYuvToRgbJniYuvlibButton);
-        listOfDisabledButtons.add(testYuvToRgbJniOpencvButton);
-        listOfDisabledButtons.add(testYuvToRgbRenderscriptButton);
+        iterationsEditText = findViewById(R.id.edittext_iterations);
+        listOfDisabledViews.add(testYuvToRgbPureJavaButton);
+        listOfDisabledViews.add(testYuvToRgbJniYuvlibButton);
+        listOfDisabledViews.add(testYuvToRgbJniOpencvButton);
+        listOfDisabledViews.add(testYuvToRgbRenderscriptButton);
+        listOfDisabledViews.add(iterationsEditText);
 
+        iterationsEditText.addTextChangedListener(new IterationsTextWatcher());
         log("Application Created");
     }
 
@@ -106,12 +115,36 @@ public class Dashboard extends AppCompatActivity {
             throw new IllegalStateException("frame not captured yet.");
         }
 
-        for (View v: listOfDisabledButtons) {
+        for (View v: listOfDisabledViews) {
             v.setEnabled(isEnabled);
         }
 
         log(String.format(
                 "Test controls: %s", isEnabled ? "Enabled" : "Disabled"));
 
+    }
+
+    private final class IterationsTextWatcher implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            // No op
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            // No op
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            final int newIterationsValue = Integer.valueOf(s.toString());
+            if (newIterationsValue <= 0 || newIterationsValue > ITERATIONS_MAX_VALUE) {
+                Toast.makeText(Dashboard.this, "value out of bounds", Toast.LENGTH_LONG).show();
+                iterationsEditText.setText(String.valueOf(DEFAULT_ITERATIONS_VALUE));
+                return;
+            }
+
+            iterations = newIterationsValue;
+        }
     }
 }

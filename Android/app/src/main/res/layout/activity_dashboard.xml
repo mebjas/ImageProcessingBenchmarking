@@ -29,7 +29,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
 
@@ -39,6 +39,15 @@
                     android:layout_height="wrap_content"
                     android:text="Capture YUV"
                     android:onClick="onCaptureButtonClicked"/>
+
+                <EditText
+                    android:id="@+id/edittext_iterations"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Iterations in number"
+                    android:text="10"
+                    android:inputType="number"
+                    android:enabled="false" />
 
             </LinearLayout>
 
