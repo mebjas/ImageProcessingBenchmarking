@@ -1,0 +1,10 @@
+<!-- Important: disable debuggable for accurate performance results -->
+<manifest
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+package="xyz.minhazav.ipb.test">
+<!-- Important: disable debuggable for accurate performance results -->
+<application
+    android:debuggable="false"
+    tools:replace="android:debuggable"/>
+</manifest>
